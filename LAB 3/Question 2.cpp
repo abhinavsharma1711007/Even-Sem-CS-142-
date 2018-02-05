@@ -1,171 +1,260 @@
+#include <iostream>
 
-#include<iostream>
 using namespace std;
 
 class node
 {
-public:
-	int data;
-	node* next;
+  public:
+    int data;
+    node *next;
+    node *prev;
+};
+class d_ll
+{
+    node *head;
+    node *tail;
+
+    public :
+    d_ll()
+    {
+        head = NULL;
+        tail = NULL;
+    }
+
+    void insert_dll(int data);
+    void insert_at(int pos, int data);
+    void delete_dll();
+    void delete_at(int pos);
+    void display();
+    int count_dll();
 };
 
-class cll
+void menu()
+{ cout<<"\n \n This is the list of thing you can do using this programme."<<endl;
+  cout<<" (a) create a linked list."<<endl;
+  cout<<" (b) add data at the end of the linked list."<<endl;
+  cout<<" (c) insert a data at any position. "<<endl;
+  cout<<" (d) delete the linked list. "<<endl;
+  cout<<" (e) delete data of a specific position."<<endl;
+  cout<<" (f) display the elements of linked list."<<endl;
+  cout<<" (g) count the number of elements in the list."<<endl;
+  cout<<" Press 'x' and hit 'enter' to exit."<<endl;
+  cout<<" Choose the option what you want to do : \n -> ";
+}
+
+int main ()
 {
-	node* head;
-	node* tail;
+  char ch;
+  d_ll dll;
 
-public:
+  while ( ch != 'x')
+     {
+        menu();
+        cin >> ch;
+        if (ch=='a')
+        {
+          cout<<"\n Linked list is created."<<endl;
+        }
+        else if (ch=='b')
+        {  char chr;
+           do
+            {
+                int data;
+                cout<<"\n Enter your data : ";
+                cin>>data;
+                dll.insert_dll(data);
+                cout<<"\n Data added. \n ";
+                cout<<" \n If you want to add more data press 'y' and hit 'Enter' \n Press any key and hit 'Enter' to exit this function \n ";
+                cin >> chr;
+            }
+            while (chr == 'y');
+        }
+        else if (ch == 'c')
+        {
+           int post, data;
+           int num;
+           num = dll.count_dll(); //calling the count_l() function to check the number element in the list
+           cout<<"\n Enter the position where you want to insert a data : ";
+           cin>>post;
+           if (0 < post && post < num+1) //condition for nonempty linked list
+           {
+              cout<<"\n Enter the new data : ";
+              cin >> data;
+              dll.insert_at(post, data); //calling the insert_at() function
+           }
+           else { cout<<" Invalid position. \n ";} //condition when position entered is not valid for the linked list
 
-	cll()
-	{
-		head = NULL;
-		tail = NULL;
-	}
+        }
+        else if (ch == 'd')
+        {
+            dll.delete_dll();
+        }
+        else if (ch=='e')
+        {
+             int post;
+             int num;
+             num = dll.count_dll();  //calling the count_l() function to check the number element in the list
+             cout <<"\n Enter the position of data you want to delete : ";
+             cin >> post;
+             if (0 < post && post <= num)  //condition for nonempty linked list
+             {
+                dll.delete_at(post);  //calling the delete_at() function
+             }
+             else {cout<<"Invalid position.";}  //condition when position entered is not valid for the linked list
+        }
+        else if (ch=='f')
+        {
+           cout<<"\n These are your data :"<<endl;
+           dll.display();
+        }
+        else if (ch == 'g')
+        {  int num;
+           num = dll.count_dll();
+           cout<<"\n There is ";
+           cout<<num;
+           cout<<" elements in your linked list. \n ";
+        }
+        else
+        {
+             cout<<"\n You have entered an invalid key try again.";  //when one enter a invalid character
+        }
 
-	void insert( int value)
-	{
-		node* temp = new node;
-		temp->data = value;
-		if( head != NULL)
-		{
-			tail->next = temp;
-			temp->next = head;
-			tail = temp;
-		}
-		else
-		{
-			
-			head = temp;
-			tail = temp;
-		}
-	}
+     cout <<"\n  Thank you for using this programme.";
+     cout <<"\n  If you want to continue press any key and hit 'enter'.";  //run the while loop again
+     cout <<"\n  If you want to exit press 'x' and hit 'enter'. \n -> ";   //break the while loop
+     cin >> ch;
+     }
+return 0;
+}
 
-	void insertAt(int pos, int value)
-	{
-		node* temp = new node;
-		node* temp2 = head;
-		node* temp3;
-		temp-> data = value;
-		if(pos==1)
-		{
-			temp->last = NULL;
-			temp->next = head;
-			head->last = temp;
-			head = temp;
-		}
-		else
-		{
-			while( pos > 2)
-			{
-				temp2 = temp2->next;
-				pos--;
-			}
-			temp3 = temp2->next;
-			temp->next = temp3;
-			temp->last = temp2;
-			temp2->next = temp;
-			temp3->last = temp;
-		}
-	}
-
-	void delet()
-	{
-		node* temp = tail->last;
-		temp->next = NULL;
-	}
-
-	void deleteAt( int pos)
-	{
-		node * temp;
-		temp = head;
-		for( int i=2; i<pos; i++)
-			temp = temp->next;
-		node *del;
-		del = temp->next;
-		temp->next = del->next;
-		node * nex;
-		nex = del->next;
-		nex->last = temp;
-		delete del;
-	}
-
-	int countItem()
-	{
-		int n = 1;
-		node* temp = head;
-		while( temp->next != NULL)
-		{
-			n++;
-			temp = temp->next;
-		}
-		return(n);
-	}
-
-	void display()
-	{
-		node* temp = head->next;
-		cout << head->data << " - > ";
-		while(temp != head)
-		{
-			cout << temp->data << " -> ";
-			temp = temp->next;
-		}
-		cout << "NULL";
-	}
-};
-
-int main()
+void d_ll :: insert_dll(int data)
 {
-	char c;
-	cll list_1;
-	int value, pos;
-	cout << " Enter 'a' for INSERT. \n";
-	cout << " Enter 'b' for INSERT AT. \n";
-	cout << " Enter 'c' for DELETE. \n";
-	cout << " Enter 'd' for DELETE AT. \n";
-	cout << " Enter 'e' for COUNT ITEM. \n";
-	cout << " Enter 'f' for DISPLAY. \n";
-	cout << " Enter 'z' for EXIT. \n";
-	while( c != 'z')
-	{
-		cout << "Enter command here:-	";
-		cin >> c;
-		if( c=='a')
-		{
-			cout << "Enter the value here:-	";
-			cin >> value;
-			list_1.insert(value);
-		}
-		else if ( c=='b')
-		{
-			cout << "Enter the value here:-	";
-			cin >> value;
-			cout << "Enter the position here:-	";
-			cin >> pos;
-			if( pos > list_1.countItem())
-				cout << "This position is not possible.";
-			else
-				list_1.insertAt( pos , value);
-		}
-		else if ( c == 'c')
-			list_1.delet();
-		else if (c == 'd')
-		{
-			cout << "Enter the position here:-	";
-			cin >> pos;
-			if( pos < list_1.countItem())
-				list_1.deleteAt(pos);
-			else if(pos == list_1.countItem())
-				list_1.delet();
-		}
-		else if (c == 'e')
-			cout << list_1.countItem();
-		else if (c == 'f')
-			list_1.display();
-		else if (c == 'z')
-			cout << "BYE";
-		else
-			cout << "COMMAND INVALID";
-	}
-	return 0;
+   node *temp=new node;
+   temp->data=data;
+   temp->next=NULL;
+   temp->prev=NULL;
+   if (head==NULL)
+   {
+       head=temp;
+       tail=temp;
+   }
+   else
+   {
+       temp->prev=tail;
+       tail->next=temp;
+       temp->next=NULL;
+       tail=tail->next;
+       cout<<"added"<<endl;
+   }
+}
+
+void d_ll :: insert_at(int post, int data)
+{
+   node *pos;
+   node *temp=new node;
+   temp->data = data;
+   temp->next=NULL;
+   temp->prev = NULL;
+   pos = head;
+   for (int i=2; i<post; i++)
+   {
+      pos = pos->next;
+   }
+   if (pos->next == NULL)
+   {
+      pos->next = temp;
+      temp->prev = pos;
+      temp->next = NULL;
+   }
+   else
+   {
+      temp->prev = pos;
+      temp->next = pos->next;
+      pos->next = temp;
+   }
+}
+
+void d_ll :: delete_dll()
+{
+   if (head != NULL)
+   {
+     while (head->next != NULL)
+     {
+        node *pos;
+        pos = head;
+        while (pos->next != NULL)
+        {
+           pos = pos->next;
+        }
+        pos = pos->prev;
+        delete pos->next;
+        pos->next = NULL;
+     }
+     head = NULL;
+     cout<<"\n Your linked list is deleted.\n ";
+   }
+   else { cout<<"\n There is no element to delete \n "; }
+}
+
+void d_ll :: delete_at(int post)
+{
+   node *pos;
+   pos = head;
+   for (int i=2; i<post; i++)
+   {
+      pos = pos->next;
+   }
+   node *del;
+   del = pos->next;
+   pos->next = del->next;
+   node *nex;
+   nex = del->next;
+   nex->prev = pos;
+   delete del;
+}
+
+void d_ll :: display()
+{
+    node *pos;
+    pos=head;
+    if (head==NULL)
+    {
+        cout<<"your list is empty.";
+    }
+    else
+    {
+       while (pos != NULL)
+      {
+         cout<<pos->data<<" -> ";
+         pos=pos->next;
+      }
+        cout<<"NULL \n ";
+
+    }
+}
+
+int d_ll :: count_dll()
+{
+    node *pos;  //create a new node type pointer called 'pos'
+    pos = head;  //makes the address of 'pos' and 'head' same
+    int i=2;
+    if (head == NULL)   //when number of element in the list is zero
+    {
+        return 0;
+    }
+
+    else if (pos->next == NULL) //when number of element in the list is one
+    {
+        return 1;
+    }
+
+    else
+    {
+        while (pos->next != tail)
+        {
+            pos = pos->next;
+            i++;
+        }
+        return i; //return the number of element present
+    }
 }
